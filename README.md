@@ -11,8 +11,8 @@ In the root directory run:
 
 # Run Script
 
-The script can than be run with:
+In the project root run:
 
-`poetry run python scraper.py [URL]`
+`poetry run python immerda_scraper/scraper.py [URL]`
 
 Where `[URL]` is the url to the immerda website e.g. https://turno.immerda.ch/s/asdasgsawfafs
