@@ -15,4 +15,4 @@ The script can than be run with:
 
 `poetry run python scraper.py [URL]`
 
-Where `[URL]` is the url to the immerda shift-website e.g. https://turno.immerda.ch/s/asdasgsawfafs
+Where `[URL]` is the url to the immerda website e.g. https://turno.immerda.ch/s/asdasgsawfafs
