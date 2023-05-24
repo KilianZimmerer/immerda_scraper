@@ -4,7 +4,7 @@ To get an overview of the amount of shifts people are doing.
 
 # Setup
 
-In the root directory run:
+In the root directory run (make sure to have poetrys installed):
 
 `poetry install`
 
