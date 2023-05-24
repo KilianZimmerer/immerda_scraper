@@ -9,7 +9,7 @@ In the root directory run:
 `poetry install`
 
 
-# Run
+# Run Script
 
 The script can than be run with:
 
