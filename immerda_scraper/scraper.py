@@ -25,4 +25,4 @@ for index, name in enumerate(names):
 df = pd.DataFrame({"names": all_names, "try_hards": all_try_hards})
 df["names"] = df["names"].str.lower()
 df.loc[df['try_hards'] == "TRY HARD", 'names'] += " (try hard)"
-df["names"].value_counts().sort_index().to_csv("counted_shifts.csv")
+df["names"].value_counts().sort_index().to_csv("data/shifts.csv")
