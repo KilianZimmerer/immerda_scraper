@@ -63,5 +63,5 @@ def _to_df(names_list, labels):
 if __name__ == '__main__':
     df = overview()
     df_faulty = faulty(df)
-    df_faulty.to_csv("schichtplan_report.csv")
+    df_faulty.to_csv("data/schichtplan_report.csv")
     
