@@ -22,7 +22,7 @@ def overview() -> pd.DataFrame:
                 continue
             tmp_names = []
             for nam in name.string.strip().replace(".","").replace("  ", "").split(","):
-                tmp_names.append(nam.strip().upper().replace("FLEXI","").replace(" ", ""))
+                tmp_names.append(nam.upper().replace("FLEXI","").strip())
             names.append(tmp_names)
     return _to_df(names, labels)
 
