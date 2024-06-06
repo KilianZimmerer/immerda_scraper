@@ -4,6 +4,8 @@ import pandas as pd
 import sys
 import numpy as np
 
+pd.options.mode.copy_on_write = True
+
 def overview() -> pd.DataFrame:
     url = sys.argv[1]
     rows = _get_content_rows(url)
@@ -19,8 +21,8 @@ def overview() -> pd.DataFrame:
                 names.append([np.nan])
                 continue
             tmp_names = []
-            for nam in name.string.strip().replace("  ", "").split(","):
-                tmp_names.append(nam.strip().upper())
+            for nam in name.string.strip().replace(".","").replace("  ", "").split(","):
+                tmp_names.append(nam.strip().upper().replace("FLEXI","").replace(" ", ""))
             names.append(tmp_names)
     return _to_df(names, labels)
 
@@ -57,11 +59,12 @@ def _to_df(names_list, labels):
     df= pd.crosstab(index=df["name"], columns=df["label"])
     df["dFLEXI"] = 1 - df["FLEXI"]
     df["dTRY_HARD"] = 1 - df["TRY_HARD"]
-    df["dNORMAL"] = 3 - df["NORMAL"]
+    df["dNORMAL"] = 2 - df["NORMAL"]
     return df
 
 if __name__ == '__main__':
     df = overview()
     df_faulty = faulty(df)
     df_faulty.to_csv("data/schichtplan_report.csv")
+    df_faulty.to_excel("data/schichtplan_report.xlsx")
     
