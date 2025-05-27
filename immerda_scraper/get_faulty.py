@@ -16,7 +16,7 @@ def _get_sums_df(df) -> pd.DataFrame:
 
 
 if __name__ == '__main__':
-    df = pd.read_csv("data/schichtplan_namen.csv")
+    df = pd.read_csv("data/schichtplan_overview.csv")
     df_faulty = faulty(df)
     df_faulty.to_csv("data/schichtplan_report.csv", index=False)
     df_faulty.to_excel(f"data/{datetime.date.today()}_schichtplan_report.xlsx", index=False)

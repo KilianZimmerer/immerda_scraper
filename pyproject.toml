@@ -2,7 +2,7 @@
 name = "immerda_scraper"
 version = "0.1.0"
 description = ""
-authors = [""]
+authors = ["KilianZimmerer"]
 readme = "README.md"
 packages = [{include = "immerda_scraper"}]
 

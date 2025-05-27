@@ -8,7 +8,7 @@ import datetime
 pd.options.mode.copy_on_write = True
 
 
-def overview(show_diff=False) -> pd.DataFrame:
+def overview(show_diff=True) -> pd.DataFrame:
     url = sys.argv[1]
     rows = _get_content_rows(url)
     labels = []
@@ -52,14 +52,15 @@ def _label(row):
     else:
         return "NORMAL"
 
-def _to_df(names_list, labels, show_diff=False):
+def _to_df(names_list, labels, show_diff=True):
     data = [(label, name) for label, sublist in zip(labels, names_list) for name in sublist]
     df = pd.DataFrame(data, columns=["label", "name"])
     df= pd.crosstab(index=df["name"], columns=df["label"])
     df = _merge_alias(df, labels)
     if show_diff:
-        for label in labels:
-            df[f"d{label}"] = 1 - df[label]
+        df[f"dTRY_HARD"] = 1 - df["TRY_HARD"]
+        df[f"dFLEXI"] = 1 - df["FLEXI"]
+        df[f"dNORMAL"] = 2 - df["NORMAL"]
     return df
 
 def _merge_alias(df, labels):
@@ -82,6 +83,7 @@ def _merge_alias(df, labels):
 
 
 if __name__ == '__main__':
-    df = overview(show_diff=False)
-    df.to_csv("data/schichtplan_namen.csv", index=False)
-    df.to_excel(f"data/{datetime.date.today()}_schichtplan_namen.xlsx", index=False)
+    df = overview(show_diff=True)
+    df.to_csv("data/schichtplan_overview.csv", index=False)
+    now = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M")
+    df.to_excel(f"data/{now}_schichtplan_overview.xlsx", index=False)
