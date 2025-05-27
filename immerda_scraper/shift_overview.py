@@ -4,6 +4,7 @@ import pandas as pd
 import sys
 import numpy as np
 import datetime
+import json
 
 pd.options.mode.copy_on_write = True
 
@@ -65,9 +66,9 @@ def _to_df(names_list, labels, show_diff=True):
 
 def _merge_alias(df, labels):
     df = df.reset_index()
-    alias_mapping = {
-        "SAMPLE_NAME": ["SAMPLE_NAME_NEW"]  # TODO: this should be done in config file
-        }
+    # TODO: this should be done in config file
+    with open("config/alias_mapper.json", "r") as f:
+        alias_mapping = json.load(f)
 
     inverse_mapping = {}
     for k, names in alias_mapping.items():
