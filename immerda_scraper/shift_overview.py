@@ -30,6 +30,9 @@ def overview(show_diff=True) -> pd.DataFrame:
             names.append(tmp_names)
     return _to_df(names, labels, show_diff)
 
+def _crawl_url(url) -> pd.DataFrame:
+    pass
+
 def _get_content_rows(url):
     page = requests.get(url)
     soup = BeautifulSoup(page.text, 'html.parser')
@@ -87,4 +90,9 @@ if __name__ == '__main__':
     df = overview(show_diff=True)
     df.to_csv("data/schichtplan_overview.csv", index=False)
     now = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M")
-    df.to_excel(f"data/{now}_schichtplan_overview.xlsx", index=False)
+    with pd.ExcelWriter(f"data/{now}_schichtplan_overview.xlsx", engine='xlsxwriter') as writer:
+        df.to_excel(writer, index=False)
+        worksheet = writer.sheets['Sheet1']
+        for idx, col in enumerate(df.columns):
+            # Set default column width (e.g., 20)
+            worksheet.set_column(idx, idx, 20)

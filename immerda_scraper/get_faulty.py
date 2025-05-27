@@ -19,5 +19,9 @@ if __name__ == '__main__':
     df = pd.read_csv("data/schichtplan_overview.csv")
     df_faulty = faulty(df)
     df_faulty.to_csv("data/schichtplan_report.csv", index=False)
-    df_faulty.to_excel(f"data/{datetime.date.today()}_schichtplan_report.xlsx", index=False)
+    with pd.ExcelWriter(f"data/{datetime.date.today()}_schichtplan_report.xlsx", engine='xlsxwriter') as writer:
+        df_faulty.to_excel(writer, index=False)
+        worksheet = writer.sheets['Sheet1']
+        for idx, col in enumerate(df_faulty.columns):
+            worksheet.set_column(idx, idx, 20)
     
