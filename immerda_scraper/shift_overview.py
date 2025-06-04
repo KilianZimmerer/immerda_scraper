@@ -10,7 +10,17 @@ pd.options.mode.copy_on_write = True
 
 
 def overview(show_diff=True) -> pd.DataFrame:
-    url = sys.argv[1]
+    urls = sys.argv[1:]
+    all_names = []
+    all_labels = []
+    for url in urls:
+        names, labels = _crawl_url(url)
+        all_names.extend(names)
+        all_labels.extend(labels)
+    return _to_df(all_names, all_labels, show_diff)
+    
+
+def _crawl_url(url) -> tuple[list, list]:
     rows = _get_content_rows(url)
     labels = []
     names = []
@@ -28,10 +38,7 @@ def overview(show_diff=True) -> pd.DataFrame:
                 # TODO: store replace options somewhere in a config
                 tmp_names.append(nam.upper().replace("FLEXI","").strip())
             names.append(tmp_names)
-    return _to_df(names, labels, show_diff)
-
-def _crawl_url(url) -> pd.DataFrame:
-    pass
+    return names, labels
 
 def _get_content_rows(url):
     page = requests.get(url)
@@ -58,8 +65,8 @@ def _label(row):
 
 def _to_df(names_list, labels, show_diff=True):
     data = [(label, name) for label, sublist in zip(labels, names_list) for name in sublist]
-    df = pd.DataFrame(data, columns=["label", "name"])
-    df= pd.crosstab(index=df["name"], columns=df["label"])
+    df = pd.DataFrame(data, columns=["label", "alias"])
+    df= pd.crosstab(index=df["alias"], columns=df["label"])
     df = _merge_alias(df, labels)
     if show_diff:
         df[f"dTRY_HARD"] = 1 - df["TRY_HARD"]
@@ -69,21 +76,32 @@ def _to_df(names_list, labels, show_diff=True):
 
 def _merge_alias(df, labels):
     df = df.reset_index()
-    # TODO: this should be done in config file
-    with open("config/alias_mapper.json", "r") as f:
-        alias_mapping = json.load(f)
+    alias_mapping = _load_alias_mapper_registered_to_schichtplan_one_to_one()
 
-    inverse_mapping = {}
-    for k, names in alias_mapping.items():
-        for name in names:
-            inverse_mapping[name] = k
-    df['group_key'] = df['name'].map(inverse_mapping).fillna(df['name'])
+    df['name'] = df['alias'].map(alias_mapping).fillna(df['alias'])
 
-    aggregations = {'name': ' / '.join}
+    aggregations = {'alias': ' / '.join}
     for label in labels:
         aggregations[label] = "sum"
 
-    return df.groupby('group_key').agg(aggregations).reset_index(drop=True)
+    return df.groupby('name').agg(aggregations).reset_index(drop=False)
+
+def _load_alias_mapper_registered_to_schichtplan():
+    with open("config/alias_mapper.json", "r") as f:
+        alias_mapping = json.load(f)["registered_to_schichtplan"]
+    return alias_mapping
+
+def _load_alias_mapper_registered_to_schichtplan_one_to_one():
+    """
+    Loads the alias mapping and converts it from dict[str, list[str]] to dict[str, str],
+    mapping each registered name to the first schichtplan alias in the list.
+    """
+    many_to_many = _load_alias_mapper_registered_to_schichtplan()
+    one_to_one = {}
+    for registered, aliases in many_to_many.items():
+        for alias in aliases:
+            one_to_one[alias] = registered
+    return one_to_one
 
 
 if __name__ == '__main__':
