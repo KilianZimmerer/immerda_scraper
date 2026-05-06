@@ -3,3 +3,10 @@
 *.xlsx
 *.xlsx#
 *.json
+
+# Virtual environment
+.venv/
+
+# Python
+__pycache__/
+*.pyc

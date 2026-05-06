@@ -4,9 +4,9 @@ To get an overview of the amount of shifts people are doing.
 
 # Setup
 
-In the root directory run (make sure to have poetrys installed):
+In the root directory run (make sure to have [uv](https://docs.astral.sh/uv/getting-started/installation/) installed):
 
-`poetry install`
+`uv sync`
 
 
 # Analysis
@@ -14,7 +14,7 @@ In the root directory run (make sure to have poetrys installed):
 
 1. Create an overview of the shifts by running:
 
-`poetry run python immerda_scraper/shift_overview.py [URL_TO_SHIFTS]`
+`uv run python immerda_scraper/shift_overview.py [URL_TO_SHIFTS]`
 
 Where `[URL]` is the url to the immerda website e.g. https://turno.immerda.ch/s/asdasgsawfafs
 
@@ -26,7 +26,7 @@ First create a file "data/hzr.csv" with a column "name" and fill it with names t
 
 Then run:
 
-`poetry run python immerda_scraper/match_to_registered.py`
+`uv run python immerda_scraper/match_to_registered.py`
 
 The output will show you the mismatch.
 
@@ -36,6 +36,6 @@ First run step 1 as explain above.
 
 Then run:
 
-`poetry run python immerad_scraper/get_faulty.py`
+`uv run python immerad_scraper/get_faulty.py`
 
 The above will create a file "data/schichtplan_report.csv" as well as a "xlsx" file "data/[date]_[time]_schichtplan_report.xlsx". These files only show the faulty shits.
