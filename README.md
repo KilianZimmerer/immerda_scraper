@@ -36,6 +36,6 @@ First run step 1 as explain above.
 
 Then run:
 
-`uv run python immerad_scraper/get_faulty.py`
+`uv run python immerda_scraper/get_faulty.py`
 
 The above will create a file "data/schichtplan_report.csv" as well as a "xlsx" file "data/[date]_[time]_schichtplan_report.xlsx". These files only show the faulty shits.
